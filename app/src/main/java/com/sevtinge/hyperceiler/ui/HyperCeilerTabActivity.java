@@ -19,15 +19,16 @@
 package com.sevtinge.hyperceiler.ui;
 
 import static com.sevtinge.hyperceiler.common.utils.DialogHelper.showUserAgreeDialog;
-import static com.sevtinge.hyperceiler.common.utils.PersistConfig.isLunarNewYearThemeView;
-import static com.sevtinge.hyperceiler.hook.utils.devicesdk.DeviceSDKKt.isTablet;
 import static com.sevtinge.hyperceiler.common.utils.LSPosedScopeHelper.mDisableOrHiddenApp;
 import static com.sevtinge.hyperceiler.common.utils.LSPosedScopeHelper.mUninstallApp;
+import static com.sevtinge.hyperceiler.common.utils.PersistConfig.isLunarNewYearThemeView;
+import static com.sevtinge.hyperceiler.hook.utils.devicesdk.DeviceSDKKt.isTablet;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -43,17 +44,17 @@ import com.sevtinge.hyperceiler.common.utils.DialogHelper;
 import com.sevtinge.hyperceiler.common.utils.LanguageHelper;
 import com.sevtinge.hyperceiler.common.utils.search.SearchHelper;
 import com.sevtinge.hyperceiler.hook.callback.IResult;
+import com.sevtinge.hyperceiler.hook.module.base.manager.ServiceManager;
 import com.sevtinge.hyperceiler.hook.safe.CrashData;
 import com.sevtinge.hyperceiler.hook.utils.BackupUtils;
 import com.sevtinge.hyperceiler.hook.utils.ThreadPoolManager;
 import com.sevtinge.hyperceiler.hook.utils.log.LogManager;
 import com.sevtinge.hyperceiler.hook.utils.shell.ShellInit;
-import com.sevtinge.hyperceiler.main.fragment.DetailFragment;
 import com.sevtinge.hyperceiler.main.NaviBaseActivity;
+import com.sevtinge.hyperceiler.main.fragment.DetailFragment;
 import com.sevtinge.hyperceiler.main.holiday.HolidayHelper;
 import com.sevtinge.hyperceiler.utils.LogServiceUtils;
 import com.sevtinge.hyperceiler.utils.PermissionUtils;
-import com.sevtinge.hyperceiler.utils.XposedActivateHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,7 +82,7 @@ public class HyperCeilerTabActivity extends NaviBaseActivity
         PermissionUtils.init(this);
         super.onCreate(savedInstanceState);
         SearchHelper.init(this, savedInstanceState != null);
-        XposedActivateHelper.init(this);
+        ServiceManager.INSTANCE.init();
         ShellInit.init(this);
         LogServiceUtils.init(this);
         LogManager.setLogLevel();
@@ -90,6 +91,11 @@ public class HyperCeilerTabActivity extends NaviBaseActivity
         mHandler.postDelayed(this::showSafeModeDialogIfNeeded, 600);
 
         requestCta();
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(() -> {
+            if (!ServiceManager.isModuleActivated()) DialogHelper.showXposedActivateDialog(this);
+        },800);
     }
 
     @SuppressLint("StringFormatInvalid")

@@ -98,6 +98,7 @@ android {
 
     packaging {
         resources {
+            merges += listOf("META-INF/xposed/*")
             excludes += listOf("/META-INF/**", "/kotlin/**", "/*.txt", "/*.bin", "/*.json")
         }
         dex {

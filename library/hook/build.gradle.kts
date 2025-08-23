@@ -62,6 +62,9 @@ dependencies {
     api(libs.expansion)
     compileOnly(projects.library.hiddenApi)
     compileOnly(libs.xposed.api)
+    compileOnly(files("libs/api-100.aar"))
+    api(files("libs/service-100.aar"))
+    api(files("libs/interface-100.aar"))
 
     api(libs.dexkit)
     api(libs.mmkv)
