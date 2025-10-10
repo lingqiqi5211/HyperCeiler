@@ -23,17 +23,21 @@ import static com.sevtinge.hyperceiler.hook.utils.devicesdk.SystemSDKKt.isHyperO
 import com.hchen.database.HookBase;
 import com.sevtinge.hyperceiler.hook.module.base.BaseModule;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.AllowManageAllNotifications;
+import com.sevtinge.hyperceiler.hook.module.hook.systemframework.AntiQues;
+import com.sevtinge.hyperceiler.hook.module.hook.systemframework.AppLinkVerify;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.AutoEffectSwitchForSystem;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.ConservativeMilletFramework;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.DisableLowApiCheckForB;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.DisableMiuiWatermark;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.DisablePersistent;
+import com.sevtinge.hyperceiler.hook.module.hook.systemframework.DisablePinVerifyPer72h;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.DisableRemoveFingerprintSensorConfig;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.DisableThermal;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.EffectBinderProxy;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.FlagSecure;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.FreeformBubble;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.GMSDozeFixFramework;
+import com.sevtinge.hyperceiler.hook.module.hook.systemframework.NoAccessDeviceLogsRequest;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.PackagePermissions;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.ThermalBrightness;
 import com.sevtinge.hyperceiler.hook.module.hook.systemframework.corepatch.AllowUpdateSystemApp;
@@ -75,7 +79,6 @@ public class SystemFrameworkB extends BaseModule {
 
         /*initHook(new StickyFloatingWindows(), mPrefsMap.getBoolean("system_framework_freeform_sticky"));
         initHook(new AllowAutoStart(), mPrefsMap.getBoolean("system_framework_auto_start_apps_menu"));
-        initHook(RemoveSmallWindowRestrictions.INSTANCE, mPrefsMap.getBoolean("system_framework_disable_freeform_blacklist"));
         initHook(MultiFreeFormSupported.INSTANCE, mPrefsMap.getBoolean("system_framework_freeform_recents_to_small_freeform"));
         initHook(new OpenAppInFreeForm(), mPrefsMap.getBoolean("system_framework_freeform_jump"));*/
 
@@ -83,6 +86,10 @@ public class SystemFrameworkB extends BaseModule {
         initHook(DisplayCutout.INSTANCE, mPrefsMap.getBoolean("system_ui_display_hide_cutout_enable"));
 
         // 其它-显示与通知
+        initHook(new AntiQues(), mPrefsMap.getBoolean("system_settings_anti_ques"));
+        initHook(new DisablePinVerifyPer72h(), mPrefsMap.getBoolean("system_framework_disable_72h_verify"));
+        initHook(new AppLinkVerify(), mPrefsMap.getBoolean("system_framework_disable_app_link_verify"));
+        initHook(NoAccessDeviceLogsRequest.INSTANCE, mPrefsMap.getBoolean("various_disable_access_device_logs"));
         initHook(new FlagSecure(), mPrefsMap.getBoolean("system_other_flag_secure"));
         initHook(new AllowManageAllNotifications(), mPrefsMap.getBoolean("system_framework_allow_manage_all_notifications"));
 
